@@ -3,7 +3,7 @@
 Python process which fetches data from CodeChef Rank API after every `15min`[default] and gives notification if anyone have solved any question.
 
 <p  align="center">
-	<img src="https://raw.githubusercontent.com/poke19962008/CC-Rank-Notifier/master/git-res/s1.png)" />
+	<img src="https://raw.githubusercontent.com/poke19962008/CC-Rank-Notifier/master/git-res/s1.png" />
 </p>
 
 ## How to use
