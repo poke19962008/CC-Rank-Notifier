@@ -27,6 +27,8 @@ def onlyInstitute(param, instiName):
 		else:
 			file = open('instiLog.json', 'r')
 			prevData = json.loads(file.read())
+			file = open('instiLog.json', 'w')
+			file.write(json.dumps(data))
 
 			for user in data:
 				found = False
