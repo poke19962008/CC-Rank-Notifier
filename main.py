@@ -1,7 +1,13 @@
 import sys, argparse, time, re, os, json
 import requests
+from pync import Notifier
 
 root = "https://www.codechef.com/api/rankings/"
+
+# The notifier function
+def notify(contName, notif):
+	for msg in notif:
+		Notifier.notify(msg['user_handle'] + " solved " + msg['problem'] + " with score " + str(msg['score']), title="Codechef "+contName+" Rank", group=os.getpid(), open="https://www.codechef.com/"+contName, appIcon="logo.png")
 
 def onlyInstitute(param, instiName):
 	notif = []
@@ -33,11 +39,13 @@ def onlyInstitute(param, instiName):
 				if not found:
 					print "Cannot find "+ user['user_handle']
 				else:
+
 					if user['score'] != prevUser['score']:
 						for prob in user['problems_status']:
 							if not prevUser['problems_status'].has_key(prob):
 								notif.append({ 'user_handle': user['user_handle'], 'problem': prob, 'score': user['problems_status'][prob]['score'] })
 	print notif
+	return notif
 
 
 
@@ -49,6 +57,10 @@ parser.add_argument('-i', '--institute', action="store_true")
 parser.add_argument('instiName', type=str)
 parser.add_argument('-u', '--user', action="store_true")
 args = parser.parse_args()
+
+if not Notifier.is_available():
+	print "Upgrade your system to OS X10.8+"
+	quit()
 
 try:
 	if args.contName == None or args.contName == "":
@@ -63,7 +75,10 @@ try:
 		if args.institute:
 			instiName = re.sub(' ', '%20', args.instiName)
 			param = "?filterBy=Institution%3D"
-			onlyInstitute(param, instiName)
+			notifs = onlyInstitute(param, instiName)
+
+			if len(notifs) != 0:
+				notify(args.contName, notifs)
 			time.sleep(3)
 except ValueError as e:
 	print e
